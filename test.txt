@@ -1,0 +1,150 @@
+Phase I (Choose application and E/R design):
+
+Phase II (E/R design to Relational Database):
+
+    Please write down the keys for each relation, the functional dependencies for each relation, 
+    and you must guarantee all the relations are 3NF or above.
+
+Phase III (Create tables, and input sample data)
+
+    Please enter at least 10 records for each of your relations.         
+
+Phase IV (Create Web Interfaces or Application for Queries and Data Modifications using MySQL+PHP, or using other databases and languages)
+
+
+Suffolk university student involvement 
+==========================
+123, Shana Cote
+456, Julia
+
+courses_major_mandatory_list
+==================
+CAS, Computer Science, Database
+CAS, Computer Science, Architecture, CS1, CS2, OOP, 
+
+
+student_courses_relation
+========================
+123, CAS, Computer Science, Databases
+456, CAS, Computer Science, Databases
+123, Business, Accounting, Accounting101
+
+student_sport_relation
+======================
+123, hockey
+456, hockey
+
+student_club_relation
+=====================
+999, club sports, hockey
+999, academic interests,  Suffolk Investments Club (SUIC), Business, Finance
+
+School
+======
+CAS
+Business
+
+Major
+=====
+Computer Science
+Biology
+
+Department
+==========
+CAS, Computer Science and Mathematics
+CAS, History
+CAS, Biology
+Business, Accounting
+Business, Finance
+
+courses
+========
+CAS, Computer Science, Computer science 1
+CAS, Computer Science, Computer science 2
+CAS, Computer Science, Databases
+Business, Accounting, Accounting101
+
+sport
+=====
+Fall, Men's, soccer
+fall, womens, volleyball
+fall, womens, cross country
+winter, womens, ice hockey
+winter, mens, basketball
+spring, mens, baseball
+spring, womens, softball
+
+club
+======
+media groups, suffolk journal
+club sports, cheerleading
+club sports, hockey
+special interests, suffolk photography club
+academic interest, finance club, Business, Finance
+academic interests,  Suffolk Investments Club (SUIC), Business, Finance
+
+
+
+
+
+Suffolk university student
+==========================
+123, Shana Cote
+
+School
+======
+s1, CAS, college of arts and science
+s2, Business, sawyer business school
+
+Department
+==========
+1, s1, Computer Science
+2, s1, Biology
+3, s2, Accounting
+4, s2, Finance
+
+courses
+========
+1, Computer science 1
+1, Computer science 2
+1, Databases
+
+
+sport
+=====
+Fall, Men's, soccer
+fall, womens, volleyball
+fall, womens, cross country
+winter, womens, ice hockey
+winter, mens, basketball
+spring, mens, baseball
+spring, womens, softball
+
+club
+======
+media groups, suffolk journal
+club sports, cheerleading
+club sports, hockey
+special interests, suffolk photography club
+
+
+
+
+Phase IV (Create Web Interfaces or Application for Queries and Data Modifications using MySQL+PHP, or using other databases and languages)
+
+-Screen to pick department and get a list of students
+-Screen to pick a school and get a list of students
+-Screen to find a student and get all courses, all sports, all clubs that he/she belongs to
+-Screen to add/delete/update student
+-Screen to add/delete/update course
+-Screen to add/delete/update sport
+-Screen to add/delete/update club
+...
+
+
+Flask, tailwind css, workbench, MySQL Connector
+PHP
+JET (Oracle)
+Vue
+Angular (Google)
+...
