@@ -31,12 +31,12 @@ app.get("/", (req, res) => {
   res.json({ message: "Welcome to bezkoder application." });
 });
 
-// require("./routes/tutorial.routes")(app);
-// require("./routes/major.routes")(app);
-// require("./routes/student.routes")(app);
-// require("./routes/course.routes")(app);
-// require("./routes/sport.routes")(app);
-// require("./routes/club.routes")(app);
+require("./routes/tutorial.routes")(app);
+require("./routes/major.routes")(app);
+require("./routes/student.routes")(app);
+require("./routes/course.routes")(app);
+require("./routes/sport.routes")(app);
+require("./routes/club.routes")(app);
 
 // set port, listen for requests
 const PORT = process.env.PORT || 8080;
