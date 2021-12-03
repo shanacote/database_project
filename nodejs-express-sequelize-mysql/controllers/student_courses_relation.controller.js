@@ -57,7 +57,7 @@ exports.findAll = (req, res) => {
 
 // Find a single student_courses_relation with an id
 exports.findOne = (req, res) => {
-    const id = req.params.student_courses_relation_id;
+    const id = req.params.id;
 
     Student_courses_relation.findByPk(id)
       .then(data => {
@@ -78,7 +78,7 @@ exports.findOne = (req, res) => {
 
 // Update a student_courses_relation by the id in the request
 exports.update = (req, res) => {
-    const id = req.params.student_courses_relation_id;
+    const id = req.params.id;
 
     Student_courses_relation.update(req.body, {
       where: { student_courses_relation_id: id }
@@ -103,7 +103,7 @@ exports.update = (req, res) => {
 
 // Delete a student_courses_relation with the specified id in the request
 exports.delete = (req, res) => {
-    const id = req.params.student_courses_relation_id;
+    const id = req.params.id;
 
     Student_courses_relation.destroy({
       where: { student_courses_relation_id: id }

@@ -57,7 +57,7 @@ exports.findAll = (req, res) => {
 
 // Find a single club with an id
 exports.findOne = (req, res) => {
-    const id = req.params.club_id;
+    const id = req.params.id;
 
     Club.findByPk(id)
       .then(data => {
@@ -78,7 +78,7 @@ exports.findOne = (req, res) => {
 
 // Update a club by the id in the request
 exports.update = (req, res) => {
-    const id = req.params.club_id;
+    const id = req.params.id;
 
     Club.update(req.body, {
       where: { club_id: id }
@@ -103,7 +103,7 @@ exports.update = (req, res) => {
 
 // Delete a club with the specified id in the request
 exports.delete = (req, res) => {
-    const id = req.params.club_id;
+    const id = req.params.id;
 
     Club.destroy({
       where: { club_id: id }

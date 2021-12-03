@@ -57,7 +57,7 @@ exports.findAll = (req, res) => {
 
 // Find a single sport with an id
 exports.findOne = (req, res) => {
-    const id = req.params.sport_id;
+    const id = req.params.id;
 
     Sport.findByPk(id)
       .then(data => {
@@ -78,7 +78,7 @@ exports.findOne = (req, res) => {
 
 // Update a sport by the id in the request
 exports.update = (req, res) => {
-    const id = req.params.sport_id;
+    const id = req.params.id;
 
     Sport.update(req.body, {
       where: { sport_id: id }
@@ -103,7 +103,7 @@ exports.update = (req, res) => {
 
 // Delete a sport with the specified id in the request
 exports.delete = (req, res) => {
-    const id = req.params.sport_id;
+    const id = req.params.id;
 
     Sport.destroy({
       where: { sport_id: id }

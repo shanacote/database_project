@@ -57,7 +57,7 @@ exports.findAll = (req, res) => {
 
 // Find a single student with an id
 exports.findOne = (req, res) => {
-    const id = req.params.student_id;
+    const id = req.params.id;
 
     Student.findByPk(id)
       .then(data => {
@@ -78,7 +78,7 @@ exports.findOne = (req, res) => {
 
 // Update a student by the id in the request
 exports.update = (req, res) => {
-    const id = req.params.student_id;
+    const id = req.params.id;
 
     Student.update(req.body, {
       where: { student_id: id }
@@ -103,7 +103,7 @@ exports.update = (req, res) => {
 
 // Delete a student with the specified id in the request
 exports.delete = (req, res) => {
-    const id = req.params.student_id;
+    const id = req.params.id;
 
     Student.destroy({
       where: { student_id: id }
