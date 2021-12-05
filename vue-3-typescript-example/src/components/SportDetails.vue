@@ -1,6 +1,6 @@
 <template>
-    <teleport to="#modals">
-        <div class="modal">
+    <!-- <teleport to="#modals">
+        <div v-if="showModal" class="modal"> -->
             <div v-if="currentSport.sport_id" class="edit-form">
                 <h4>Sport</h4>
                 <form>
@@ -35,12 +35,12 @@
                 </form>
 
 
-                <button class="inline-block p-1 text-center font-semibold text-sm align-baseline leading-none rounded bg-red-600 text-white hover:bg-red-700 mr-2" @click="deleteSport">
+                <!-- <button class="inline-block p-1 text-center font-semibold text-sm align-baseline leading-none rounded bg-red-600 text-white hover:bg-red-700 mr-2" @click="deleteSport">
                 Delete
-                </button>
+                </button> -->
 
                 <button type="submit" class="inline-block p-1 text-center font-semibold text-sm align-baseline leading-none rounded bg-green-500 text-white hover:green-600" @click="updateSport">
-                Update
+                Save
                 </button>
                 <p>{{ message }}</p>
             </div>
@@ -49,8 +49,8 @@
                 <br />
                 <p>Please click on a Sport...</p>
             </div>
-        </div>
-    </teleport>
+        <!-- </div>
+    </teleport> -->
 </template>
 
 <script lang="ts">
@@ -60,52 +60,62 @@ import Sport from "@/types/Sport";
 import ResponseData from "@/types/ResponseData";
 
 export default defineComponent({
-  name: "sport",
-  data() {
-    return {
-      currentSport: {} as Sport,
-      message: "",
-    };
-  },
-  methods: {
-    getSport(id: any) {
-      SportDataService.get(id)
-        .then((response: ResponseData) => {
-          this.currentSport = response.data;
-          console.log(response.data);
-        })
-        .catch((e: Error) => {
-          console.log(e);
-        });
+    name: "sport",
+    props: {
+        currentSportId: String,
     },
+    data() {
+        return {
+            currentSport: {} as Sport,
+            showModal: true,
+            message: "",
+        };
+    },
+    emits: ['doneUpdate'],
+    methods: {
+        getSport(id: any) {
+            SportDataService.get(id)
+                .then((response: ResponseData) => {
+                    this.currentSport = response.data;
+                    console.log(response.data);
+                })
+                .catch((e: Error) => {
+                    console.error(e);
+                });
+        },
 
 
-    updateSport() {
-      SportDataService.update(this.currentSport.sport_id, this.currentSport)
-        .then((response: ResponseData) => {
-          console.log(response.data);
-          this.message = "The sport was updated successfully!";
-        })
-        .catch((e: Error) => {
-          console.log(e);
-        });
-    },
+        updateSport() {
+            SportDataService.update(this.currentSport.sport_id, this.currentSport)
+            .then((response: ResponseData) => {
+                console.log(response.data);
+                this.message = "The sport was updated successfully!";
+                this.$emit('doneUpdate');
+            })
+            .catch((e: Error) => {
+                console.error(e);
+                this.$emit('doneUpdate');
+            });
+        },
 
-    deleteSport() {
-      SportDataService.delete(this.currentSport.sport_id)
-        .then((response: ResponseData) => {
-          console.log(response.data);
-          this.$router.push({ name: "sports" });
-        })
-        .catch((e: Error) => {
-          console.log(e);
-        });
+        // deleteSport() {
+        //     SportDataService.delete(this.currentSport.sport_id)
+        //         .then((response: ResponseData) => {
+        //             console.log(response.data);
+        //             this.$router.push({ name: "sports" });
+        //         })
+        //         .catch((e: Error) => {
+        //             console.log(e);
+        //         });
+        // },
     },
-  },
-  mounted() {
-    this.message = "";
-    this.getSport(this.$route.params.id);
-  },
+    mounted() {
+        this.message = "";
+        this.getSport(this.$route.params.id||this.$props.currentSportId);
+    },
+    dismount() {
+        this.showModal=false;
+    }
 });
 </script>
 
@@ -114,6 +124,7 @@ export default defineComponent({
   max-width: 300px;
   margin: auto;
 }
+
 .modal {
     position: absolute;
     top: 50%;

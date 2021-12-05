@@ -19,16 +19,15 @@
                 <button type="button" @click="deleteClicked(data.value.sport_id)" data-id="{{data.value[col.field]}}" ><font-awesome-icon :icon="['fas', 'trash-alt']" /></button>
             </div>
             <div v-else>
+                <!-- Show normal cell value -->
                 {{data.value[col.field]}}
             </div>
-        <!-- <template v-slot:name="data">
-            <button type="button" data-id="{{data.value.name}}" ><font-awesome-icon :icon="['fas', 'pencil-alt']" />{{data.value.name}}</button> -->
         </template>
     </table-lite>
 
     <teleport to="#modals">
-        <div v-if="showEdit" class="modal">
-            <SportList :currentSport="currentSportId"></SportList>
+        <div v-if="table.showEditModal" class="modal">
+            <SportDetails :current-sport-id="table.currentSportId" @doneUpdate="editModalDone"></SportDetails>
         </div>
     </teleport>
 </template>
@@ -37,8 +36,9 @@
 import { defineComponent, reactive, ref } from "vue";
 import TableLite from "./Table.vue";
 import SportDataService from "@/services/SportDataService";
+import Sport from "@/types/Sport";
 import ResponseData from "@/types/ResponseData";
-import SportList from "./SportsList.vue";
+import SportDetails from "./SportDetails.vue";
 
 const table = reactive({
     isLoading: true,
@@ -87,9 +87,8 @@ const table = reactive({
             // }
         }
     ],
-    rows: [
-        // {id:'1',name:'test',email:'jc'}
-    ],
+    rows: [] as Array<Sport>,
+    showEditModal: false,
     currentSportId: -1,
     totalRecordCount: 0,
     sortable: {
@@ -98,36 +97,36 @@ const table = reactive({
     }
 });
 
-SportDataService.getAll()
-    .then((response: ResponseData) => {
-        // this.sports = response.data;
-        console.log(response.data);
-
-        // refresh table rows
-        table.rows = response.data;
-        table.totalRecordCount = response.data.length;
-        table.isLoading = false;
-    })
-    .catch((e: Error) => {
-        console.log(e);
-        table.isLoading = false;
-    });
 
 export default defineComponent({
     name: "SportTable",
-    components: { TableLite },
-    data() { return {table, doSearch, updateCheckedRows, tableLoadingFinish, editClicked, deleteClicked} },
+    components: { TableLite, SportDetails },
+    data() { return {table, doSearch, updateCheckedRows, tableLoadingFinish, editClicked, deleteClicked, editModalDone} },
     props: {
         msg: String,
     },
 });
-
+const editModalDone=function() {
+    table.showEditModal=false;
+    doSearch('sport_id', 'asc');
+}
 const editClicked=function(sportId:number) {
     console.log('edit clicked for:'+sportId);
     table.currentSportId=sportId;
+    table.showEditModal=true;
 }
 const deleteClicked=function(sportId:number) {
     console.log('delete clicked for:'+sportId);
+    SportDataService.delete(sportId)
+        .then((response: ResponseData) => {
+            console.log(response.data);
+            const idx=table.rows.findIndex(e=>e.sport_id===sportId);
+            table.rows.splice(idx,1);
+            table.totalRecordCount--;
+        })
+        .catch((e: Error) => {
+          console.log(e);
+        });
 }
 const doSearch = (order: string, sort: string) => {
     table.isLoading = true;
@@ -136,38 +135,17 @@ const doSearch = (order: string, sort: string) => {
         .then((response: ResponseData) => {
             // this.sports = response.data;
             console.log(response.data);
-            // Point: your response is like it on this example.
-            //   {
-            //   rows: [{
-            //     id: 1,
-            //     name: 'jack',
-            //     email: 'example@example.com'
-            //   },{
-            //     id: 2,
-            //     name: 'rose',
-            //     email: 'example@example.com'
-            //   }],
-            //   count: 2,
-            //   ...something
-            // }
-
             // refresh table rows
-            table.rows = response.data.rows;
-            table.totalRecordCount = response.data.count;
+            table.rows = response.data;
+            table.totalRecordCount = response.data.length;
             table.sortable.order = order;
             table.sortable.sort = sort;
-            // table.isLoading = false;
+            table.isLoading = false;
         })
         .catch((e: Error) => {
             console.log(e);
-            // table.isLoading = false;
+            table.isLoading = false;
         });
-    // // Start use axios to get data from Server
-    // let url = 'https://www.example.com/api/some_endpoint?offset=' + offset + '&limit=' + limit + '&order=' + order + '&sort=' + sort;
-    // axios.get(url)
-    // .then((response) => {
-    // });
-  // End use axios to get data from Server
 };
 
 const tableLoadingFinish = (elements: any) => {
@@ -200,6 +178,9 @@ const updateCheckedRows = (rowsKey: string) => {
     // do your checkbox click event
     console.log(`Selected: ${rowsKey}`);
 };
+// Initial load
+doSearch('sport_id', 'asc');
+
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
