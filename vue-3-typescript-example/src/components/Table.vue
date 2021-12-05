@@ -19,7 +19,7 @@
               id="dataTables-example"
               ref="localTable"
             >
-              <thead class="thead-dark">
+              <thead class="bg-gray-50">
                 <tr>
                   <th v-if="hasCheckbox" class="checkbox-th">
                     <div>
@@ -47,8 +47,8 @@
               </thead>
               <tbody v-if="rows.length > 0">
                 <template v-if="isStaticMode">
-                  <tr v-for="(row, i) in localRows" :key="i">
-                    <td v-if="hasCheckbox">
+                  <tr v-for="(row, i) in localRows" :key="i" class="whitespace-nowrap">
+                    <td v-if="hasCheckbox" class="px-6 py-4 text-sm text-gray-500">
                       <div>
                         <input
                           type="checkbox"
@@ -62,11 +62,11 @@
                         />
                       </div>
                     </td>
-                    <td v-for="(col, j) in columns" :key="j">
+                    <td v-for="(col, j) in columns" :key="j" class="px-6 py-4 text-sm text-gray-500">
                         <!-- <slot :row="row" :col="col"></slot> -->
                       <div v-if="col.display" v-html="col.display(row)"></div>
                       <template v-else>
-                        <div v-if="setting.isSlotMode">
+                        <div v-if="setting.isSlotMode && slots[col.field]">
                           <slot :name="col.field" :value="row"></slot>
                         </div>
                         <span v-else>{{ row[col.field] }}</span>
@@ -75,8 +75,8 @@
                   </tr>
                 </template>
                 <template v-else>
-                  <tr v-for="(row, i) in rows" :key="i">
-                    <td v-if="hasCheckbox">
+                  <tr v-for="(row, i) in rows" :key="i" class="whitespace-nowrap">
+                    <td v-if="hasCheckbox" class="px-6 py-4 text-sm text-gray-500">
                       <div>
                         <input
                           type="checkbox"
@@ -90,10 +90,10 @@
                         />
                       </div>
                     </td>
-                    <td v-for="(col, j) in columns" :key="j">
+                    <td v-for="(col, j) in columns" :key="j" class="px-6 py-4 text-sm text-gray-500">
                       <div v-if="col.display" v-html="col.display(row)"></div>
                       <div v-else>
-                        <div v-if="setting.isSlotMode">
+                        <div v-if="setting.isSlotMode && slots[col.field]">
                           <slot :name="col.field" :value="row"></slot>
                         </div>
                         <span v-else>{{ row[col.field] }}</span>
@@ -182,7 +182,7 @@ export default defineComponent({
         // V-slot mode
         isSlotMode: { type: Boolean, default: false }
     },
-    setup(props, { emit }) {
+    setup(props, { emit, slots }) {
         let localTable = ref<HTMLElement | null>(null);
         // Internal set value for components
         const setting: tableSetting = reactive({
@@ -363,6 +363,7 @@ export default defineComponent({
     if (props.hasCheckbox) {
         // When Checkbox is needed
         return {
+            slots,
             localTable,
             localRows,
             setting,
@@ -376,6 +377,7 @@ export default defineComponent({
         };
     } else {
         return {
+            slots,
             localTable,
             localRows,
             setting,

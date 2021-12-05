@@ -6,7 +6,7 @@
           type="text"
           class="block appearance-none w-full py-1 px-2 mb-1 text-base leading-normal bg-white text-gray-800 border border-gray-200 rounded"
           placeholder="Search by title"
-          v-model="title"
+          v-model="gender"
         />
         <div class="input-group-append">
           <button
@@ -29,7 +29,7 @@
           :key="index"
           @click="setActiveSport(sport, index)"
         >
-          {{ sport.sport_id }}
+          {{ sport.sport_id }}, {{ sport.gender }}, {{ sport.sport }}, {{ sport.season }}
         </li>
       </ul>
 
@@ -41,15 +41,16 @@
       <div v-if="currentSport.sport_id">
         <h4>Sport</h4>
         <div>
+          <label><strong>ID:</strong></label> {{ currentSport.sport_id }}
+        </div>
+        <div>
           <label><strong>Gender:</strong></label> {{ currentSport.gender }}
         </div>
         <div>
-          <label><strong>Sport:</strong></label>
-          {{ currentSport.sport }}
+          <label><strong>Sport:</strong></label>{{ currentSport.sport }}
         </div>
         <div>
-          <label><strong>Season:</strong></label>
-          {{ currentSport.season }}
+          <label><strong>Season:</strong></label>{{ currentSport.season }}
         </div>
 
         <router-link

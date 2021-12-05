@@ -1,8 +1,8 @@
 <template>
     <table-lite
-        :is-slot-mode="false"
+        :is-slot-mode="true"
         :title= "'test'"
-        :has-checkbox="true"
+        :has-checkbox="false"
         :is-loading="table.isLoading"
         :columns="table.columns"
         :rows="table.rows"
@@ -13,10 +13,24 @@
         @is-finished-old="table.isLoading = false"
         @is-finished="tableLoadingFinish"
         @return-checked-rows="updateCheckedRows">
+        <template v-for="(col, i) of table.columns" v-slot:[col.field]="data" :key="i">
+            <div v-if="!data.value[col.field]">
+                <button type="button" @click="editClicked(data.value.sport_id)" data-id="{{data.value[col.field]}}" ><font-awesome-icon :icon="['fas', 'pencil-alt']" /></button>&nbsp;
+                <button type="button" @click="deleteClicked(data.value.sport_id)" data-id="{{data.value[col.field]}}" ><font-awesome-icon :icon="['fas', 'trash-alt']" /></button>
+            </div>
+            <div v-else>
+                {{data.value[col.field]}}
+            </div>
         <!-- <template v-slot:name="data">
-            <button type="button" data-id="{{data.value.name}}" ><font-awesome-icon :icon="['fas', 'pencil-alt']" />Button</button>
-        </template> -->
+            <button type="button" data-id="{{data.value.name}}" ><font-awesome-icon :icon="['fas', 'pencil-alt']" />{{data.value.name}}</button> -->
+        </template>
     </table-lite>
+
+    <teleport to="#modals">
+        <div v-if="showEdit" class="modal">
+            <SportList :currentSport="currentSportId"></SportList>
+        </div>
+    </teleport>
 </template>
 
 <script lang="ts">
@@ -24,6 +38,7 @@ import { defineComponent, reactive, ref } from "vue";
 import TableLite from "./Table.vue";
 import SportDataService from "@/services/SportDataService";
 import ResponseData from "@/types/ResponseData";
+import SportList from "./SportsList.vue";
 
 const table = reactive({
     isLoading: true,
@@ -40,11 +55,11 @@ const table = reactive({
             field: "gender",
             width: "10%",
             sortable: true,
-            // display: function (row: any) {
-            //     return (
-            //     '<a href="/sports/' + row.sport_id + '" class="name-btn">' + row.title + "</button>"
-            //     );
-            // }
+            display: function (row: any) {
+                return (
+                '<a href="/sports/' + row.sport_id + '" class="name-btn">' + row.gender + "</button>"
+                );
+            }
         },
         {
             label: "Sport",
@@ -62,19 +77,20 @@ const table = reactive({
             label: "",
             field: "quick",
             width: "10%",
-            display: function (row: any) {
-                return (
-                    // '<button type="button" data-id="' + row.sport_id + '" ><font-awesome-icon :icon="[\'fas\', \'pencil-alt\']" />Button</button>'
-                   '<button type="button" data-id="' + row.sport_id + '" class="is-rows-el quick-btn-edit  p-1  font-semibold text-sm   rounded bg-blue-500 text-white hover:bg-blue-600">Edit</button>&nbsp;'+
-                   '<button type="button" data-id="' + row.sport_id + '" class="is-rows-el quick-btn-delete  p-1  font-semibold text-sm   rounded bg-blue-500 text-white hover:bg-blue-600">Delete</button>'
-                    // '<button type="button" data-id="' + row.user_id + '" class="quick-btn">Button</button>'
-                );
-            }
+            // display: function (row: any) {
+            //     return (
+            //         // '<button type="button" data-id="' + row.sport_id + '" ><font-awesome-icon :icon="[\'fas\', \'pencil-alt\']" />Button</button>'
+            //        '<button type="button" data-id="' + row.sport_id + '" class="is-rows-el quick-btn-edit  p-1  font-semibold text-sm   rounded bg-blue-500 text-white hover:bg-blue-600">Edit</button>&nbsp;'+
+            //        '<button type="button" data-id="' + row.sport_id + '" class="is-rows-el quick-btn-delete  p-1  font-semibold text-sm   rounded bg-blue-500 text-white hover:bg-blue-600">Delete</button>'
+            //         // '<button type="button" data-id="' + row.user_id + '" class="quick-btn">Button</button>'
+            //     );
+            // }
         }
     ],
     rows: [
         // {id:'1',name:'test',email:'jc'}
     ],
+    currentSportId: -1,
     totalRecordCount: 0,
     sortable: {
         order: "sport_id",
@@ -100,13 +116,19 @@ SportDataService.getAll()
 export default defineComponent({
     name: "SportTable",
     components: { TableLite },
-    data() { return {table, doSearch, updateCheckedRows, tableLoadingFinish} },
+    data() { return {table, doSearch, updateCheckedRows, tableLoadingFinish, editClicked, deleteClicked} },
     props: {
         msg: String,
     },
 });
 
-
+const editClicked=function(sportId:number) {
+    console.log('edit clicked for:'+sportId);
+    table.currentSportId=sportId;
+}
+const deleteClicked=function(sportId:number) {
+    console.log('delete clicked for:'+sportId);
+}
 const doSearch = (order: string, sort: string) => {
     table.isLoading = true;
 
@@ -156,19 +178,19 @@ const tableLoadingFinish = (elements: any) => {
         if (element.classList.contains("name-btn")) {
             element.addEventListener("click",  () => {
                 // do your click event
-                console.log(self.dataset.sport_id + " name-btn click!!");
+                console.log(self.dataset.id + " name-btn click!!");
             });
         }
         if (element.classList.contains("quick-btn-edit")) {
             // do your click event
             element.addEventListener("click",  function(this:any) {
-                console.log(this.dataset.sport_id + " quick-btn-edit click!!");
+                console.log(this.dataset.id + " quick-btn-edit click!!");
             });
         }
         if (element.classList.contains("quick-btn-delete")) {
             // do your click event
             element.addEventListener("click",  function(this:any) {
-                console.log(this.dataset.sport_id + " quick-btn-delete click!!");
+                console.log(this.dataset.id + " quick-btn-delete click!!");
             });
         }
     });

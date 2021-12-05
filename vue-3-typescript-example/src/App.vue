@@ -1,11 +1,6 @@
 <template>
   <!-- <HelloWorld msg="Welcome to Your Vue.js + TypeScript App" /> -->
   <!-- <TutorialTable msg="test"/> -->
-  <!-- <fa icon="coffee"/> -->
-  <!-- <fa icon="user-secret" /> -->
-    <button type="button"><font-awesome-icon :icon="['fas', 'pencil-alt']" /></button>
-  <font-awesome-icon :icon="['fas', 'pencil-alt']" />
-  <font-awesome-icon :icon="['fas', 'user-secret']" />
   <div id="app">
     <nav class="relative flex flex-wrap items-center content-between py-3 px-4 flex-no-wrap content-start text-white bg-gray-900">
       <router-link to="/" class="inline-block pt-1 pb-1 mr-4 text-lg whitespace-no-wrap">bezKoder</router-link>
@@ -23,6 +18,8 @@
       <router-view />
     </div>
   </div>
+  <!-- https://www.youtube.com/watch?v=TYcNDRav-N4 -->
+  <div id=modals></div>
 </template>
 
 <script lang="ts">

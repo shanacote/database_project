@@ -1,7 +1,3 @@
-// https://www.bezkoder.com/node-js-rest-api-express-mysql/
-// https://www.bezkoder.com/vue-js-node-js-express-mysql-crud-example/
-// Make sure mysql is running: 'brew services start mysql'
-// Start the app:  node server.js
 const express = require("express");
 const bodyParser = require("body-parser");
 const cors = require("cors");

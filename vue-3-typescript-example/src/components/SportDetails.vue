@@ -1,52 +1,56 @@
 <template>
-  <div v-if="currentSport.sport_id" class="edit-form">
-    <h4>Sport</h4>
-    <form>
-      <div class="mb-4">
-        <label for="gender">Gender</label>
-        <input
-          type="text"
-          class="block appearance-none w-full py-1 px-2 mb-1 text-base leading-normal bg-white text-gray-800 border border-gray-200 rounded"
-          id="gender"
-          v-model="currentSport.gender"
-        />
-      </div>
-      <div class="mb-4">
-        <label for="sport">Sport</label>
-        <input
-          type="text"
-          class="block appearance-none w-full py-1 px-2 mb-1 text-base leading-normal bg-white text-gray-800 border border-gray-200 rounded"
-          id="sport"
-          v-model="currentSport.sport"
-        />
-      </div>
-      <div class="mb-4">
-        <label for="season">Season</label>
-        <input
-          type="text"
-          class="block appearance-none w-full py-1 px-2 mb-1 text-base leading-normal bg-white text-gray-800 border border-gray-200 rounded"
-          id="season"
-          v-model="currentSport.season"
-        />
-      </div>
+    <teleport to="#modals">
+        <div class="modal">
+            <div v-if="currentSport.sport_id" class="edit-form">
+                <h4>Sport</h4>
+                <form>
+                <div class="mb-4">
+                    <label for="gender">Gender</label>
+                    <input
+                    type="text"
+                    class="block appearance-none w-full py-1 px-2 mb-1 text-base leading-normal bg-white text-gray-800 border border-gray-200 rounded"
+                    id="gender"
+                    v-model="currentSport.gender"
+                    />
+                </div>
+                <div class="mb-4">
+                    <label for="sport">Sport</label>
+                    <input
+                    type="text"
+                    class="block appearance-none w-full py-1 px-2 mb-1 text-base leading-normal bg-white text-gray-800 border border-gray-200 rounded"
+                    id="sport"
+                    v-model="currentSport.sport"
+                    />
+                </div>
+                <div class="mb-4">
+                    <label for="season">Season</label>
+                    <input
+                    type="text"
+                    class="block appearance-none w-full py-1 px-2 mb-1 text-base leading-normal bg-white text-gray-800 border border-gray-200 rounded"
+                    id="season"
+                    v-model="currentSport.season"
+                    />
+                </div>
 
-    </form>
+                </form>
 
 
-    <button class="inline-block p-1 text-center font-semibold text-sm align-baseline leading-none rounded bg-red-600 text-white hover:bg-red-700 mr-2" @click="deleteSport">
-      Delete
-    </button>
+                <button class="inline-block p-1 text-center font-semibold text-sm align-baseline leading-none rounded bg-red-600 text-white hover:bg-red-700 mr-2" @click="deleteSport">
+                Delete
+                </button>
 
-    <button type="submit" class="inline-block p-1 text-center font-semibold text-sm align-baseline leading-none rounded bg-green-500 text-white hover:green-600" @click="updateSport">
-      Update
-    </button>
-    <p>{{ message }}</p>
-  </div>
+                <button type="submit" class="inline-block p-1 text-center font-semibold text-sm align-baseline leading-none rounded bg-green-500 text-white hover:green-600" @click="updateSport">
+                Update
+                </button>
+                <p>{{ message }}</p>
+            </div>
 
-  <div v-else>
-    <br />
-    <p>Please click on a Sport...</p>
-  </div>
+            <div v-else>
+                <br />
+                <p>Please click on a Sport...</p>
+            </div>
+        </div>
+    </teleport>
 </template>
 
 <script lang="ts">
@@ -109,5 +113,15 @@ export default defineComponent({
 .edit-form {
   max-width: 300px;
   margin: auto;
+}
+.modal {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    height: 300px;
+    width: 400px;
+    background: gray;
+    text-align: center;
 }
 </style>
