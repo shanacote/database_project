@@ -12,28 +12,6 @@
           name="name"
         />
       </div>
-<!-- 
-      <div class="mb-4">
-        <label for="sport">Sport</label>
-        <input
-          class="block appearance-none w-full py-1 px-2 mb-1 text-base leading-normal bg-white text-gray-800 border border-gray-200 rounded"
-          id="sport"
-          required
-          v-model="sport.sport"
-          name="sport"
-        />
-      </div>
-
-      <div class="mb-4">
-        <label for="season">Season</label>
-        <input
-          class="block appearance-none w-full py-1 px-2 mb-1 text-base leading-normal bg-white text-gray-800 border border-gray-200 rounded"
-          id="season"
-          required
-          v-model="sport.season"
-          name="season"
-        />
-      </div> -->
 
       <button @click="saveMajor" class="inline-block align-middle text-center select-none border font-normal whitespace-no-wrap rounded py-1 px-3 leading-normal no-underline bg-green-500 text-white hover:bg-green-600">Submit</button>
     </div>

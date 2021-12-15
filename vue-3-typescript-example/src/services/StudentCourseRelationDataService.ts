@@ -1,32 +1,33 @@
 import http from "@/http-common";
 
+const ENDPOINT='student_courses_relation';
 class StudentCourseRelationDataService {
     getAll(): Promise<any> {
-        return http.get("/student_course_relation");
+        return http.get(ENDPOINT);
     }
 
     get(id: any): Promise<any> {
-        return http.get(`/student_course_relation/${id}`);
+        return http.get(`${ENDPOINT}/${id}`);
     }
 
     create(data: any): Promise<any> {
-        return http.post("/student_course_relation", data);
+        return http.post(ENDPOINT, data);
     }
 
     update(id: any, data: any): Promise<any> {
-        return http.put(`/student_course_relation/${id}`, data);
+        return http.put(`${ENDPOINT}/${id}`, data);
     }
 
-    delete(id: any): Promise<any> {
-        return http.delete(`/student_course_relation/${id}`);
+    delete(student_id: any, course_id: any): Promise<any> {
+        return http.delete(`${ENDPOINT}/${student_id}/${course_id}`);
     }
 
     deleteAll(): Promise<any> {
-        return http.delete(`/student_course_relation`);
+        return http.delete(ENDPOINT);
     }
 
     findByTitle(title: string): Promise<any> {
-        return http.get(`/student_course_relation?title=${title}`);
+        return http.get(`${ENDPOINT}?title=${title}`);
     }
 }
 

@@ -5,7 +5,7 @@ const Op = db.Sequelize.Op;
 // Create and Save a new student
 exports.create = (req, res) => {
     // Validate request
-    if (!req.body.title) {
+    if (!req.body.name || !req.body.major_id || !req.body.password) {
       res.status(400).send({
         message: "Content can not be empty!"
       });
@@ -14,9 +14,9 @@ exports.create = (req, res) => {
 
     // Create a student
     const student = {
-      gender: req.body.gender,
-      student: req.body.student,
-      season: req.body.season
+      name: req.body.name,
+      major_id: req.body.major_id,
+      password: req.body.password
     };
 
     // Save student in the database
@@ -34,13 +34,13 @@ exports.create = (req, res) => {
 
 // Retrieve all Tutorials from the database.
 exports.findAll = (req, res) => {
-    const gender = req.query.gender;
-    const student = req.query.student;
-    const season = req.query.season;
-    const condition = (gender||student||season)?{
-        gender: gender?{[Op.like]: `%${gender}%`}:undefined,
-        student: student?{[Op.like]: `%${student}%`}:undefined,
-        season: season?{[Op.like]: `%${season}%`}:undefined
+    const name = req.query.name;
+    const major_id = req.query.major_id;
+    const password = req.query.password;
+    const condition = (name||major_id||password)?{
+        name: name?{[Op.like]: `%${name}%`}:undefined,
+        major_id: major_id?{[Op.like]: `%${major_id}%`}:undefined,
+        password: password?{[Op.like]: `%${password}%`}:undefined
     }:null;
 
     Student.findAll({ where: condition })

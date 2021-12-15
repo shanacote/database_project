@@ -8,10 +8,13 @@ module.exports = (sequelize, Sequelize) => {
         type: Sequelize.STRING
       },
       major_id: {
-        type: Sequelize.STRING
+        type: Sequelize.INTEGER
       },
       course_code: {
         type: Sequelize.STRING
+      },
+      name: {
+          type:Sequelize.STRING
       }
     }, {
         timestamps: false,

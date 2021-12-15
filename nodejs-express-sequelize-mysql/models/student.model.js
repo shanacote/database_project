@@ -8,6 +8,9 @@ module.exports = (sequelize, Sequelize) => {
         type: Sequelize.STRING
       },
       major_id: {
+        type: Sequelize.INTEGER
+      },
+      password: {
         type: Sequelize.STRING
       }
     }, {

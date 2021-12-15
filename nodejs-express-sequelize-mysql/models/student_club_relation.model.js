@@ -1,10 +1,12 @@
 module.exports = (sequelize, Sequelize) => {
     const StudentClubRelation = sequelize.define("student_club_relation", {
       student_id: {
-        type: Sequelize.STRING
+        type: Sequelize.INTEGER,
+        primaryKey: true
       },
       club_id: {
-        type: Sequelize.STRING
+        type: Sequelize.INTEGER,
+        primaryKey: true
       }
     }, {
         timestamps: false,

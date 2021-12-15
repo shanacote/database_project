@@ -36,7 +36,9 @@
 import { defineComponent, reactive, ref } from "vue";
 import TableLite from "./Table.vue";
 import StudentDataService from "@/services/StudentDataService";
+import MajorDataService from "@/services/MajorDataService";
 import Student from "@/types/Student";
+import Major from "@/types/Major";
 import ResponseData from "@/types/ResponseData";
 import StudentDetails from "./StudentDetails.vue";
 
@@ -61,18 +63,18 @@ const table = reactive({
                 );
             }
         },
-        // {
-        //     label: "Sport",
-        //     field: "sport",
-        //     width: "25%",
-        //     sortable: false,
-        // },
-        // {
-        //     label: "Season",
-        //     field: "season",
-        //     width: "10%",
-        //     sortable: true,
-        // },
+        {
+            label: "Major",
+            field: "major_id",
+            width: "10%",
+            sortable: true,
+            display: function (row: any) {
+                const major:Major=table.majors.find((e:Major)=>e.major_id===row.major_id)!;
+                return (
+                    '<span>'+major.name+'</span>'
+                );
+            }
+        },
         {
             label: "",
             field: "quick",
@@ -88,6 +90,7 @@ const table = reactive({
         }
     ],
     rows: [] as Array<Student>,
+    majors: [] as Array<Major>,
     showEditModal: false,
     currentStudentId: -1,
     totalRecordCount: 0,
@@ -120,7 +123,7 @@ const deleteClicked=function(studentId:number) {
     StudentDataService.delete(studentId)
         .then((response: ResponseData) => {
             console.log(response.data);
-            const idx=table.rows.findIndex(e=>e.student_id===studentId);
+            const idx=table.rows.findIndex((e:Student)=>e.student_id===studentId);
             table.rows.splice(idx,1);
             table.totalRecordCount--;
         })
@@ -130,7 +133,9 @@ const deleteClicked=function(studentId:number) {
 }
 const doSearch = (order: string, sort: string) => {
     table.isLoading = true;
-
+    MajorDataService.getAll().then((response: ResponseData) => {
+        table.majors=response.data;
+    });
     StudentDataService.getAll()
         .then((response: ResponseData) => {
             // this.students = response.data;

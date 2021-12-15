@@ -5,8 +5,8 @@ const Op = db.Sequelize.Op;
 // Create and Save a new course
 exports.create = (req, res) => {
     // Validate request
-    if (!req.body.title) {
-      res.status(400).send({
+    if (!req.body.school_code || !req.body.major_id || !req.body.course_code || !req.body.name) {
+        res.status(400).send({
         message: "Content can not be empty!"
       });
       return;
@@ -14,9 +14,10 @@ exports.create = (req, res) => {
 
     // Create a course
     const course = {
-      gender: req.body.gender,
-      course: req.body.course,
-      season: req.body.season
+        school_code: req.body.school_code,
+        major_id: req.body.major_id,
+        course_code: req.body.course_code,
+        name: req.body.name
     };
 
     // Save course in the database
@@ -34,13 +35,15 @@ exports.create = (req, res) => {
 
 // Retrieve all Tutorials from the database.
 exports.findAll = (req, res) => {
-    const gender = req.query.gender;
-    const course = req.query.course;
-    const season = req.query.season;
-    const condition = (gender||course||season)?{
-        gender: gender?{[Op.like]: `%${gender}%`}:undefined,
-        course: course?{[Op.like]: `%${course}%`}:undefined,
-        season: season?{[Op.like]: `%${season}%`}:undefined
+    const school_code= req.query.school_code;
+    const major_id=req.query.major_id;
+    const course_code= req.query.course_code;
+    const name= req.query.name;
+    const condition = (school_code||major_id||course_code||name)?{
+        school_code: school_code?{[Op.like]: `%${school_code}%`}:undefined,
+        major_id: major_id?{[Op.like]: `%${major_id}%`}:undefined,
+        course_code: course_code?{[Op.like]: `%${course_code}%`}:undefined,
+        name: name?{[Op.like]: `%${name}%`}:undefined
     }:null;
 
     Course.findAll({ where: condition })

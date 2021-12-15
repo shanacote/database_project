@@ -5,7 +5,7 @@ const Op = db.Sequelize.Op;
 // Create and Save a new club
 exports.create = (req, res) => {
     // Validate request
-    if (!req.body.title) {
+    if (!req.body.name||!req.body.type) {
       res.status(400).send({
         message: "Content can not be empty!"
       });
@@ -14,9 +14,8 @@ exports.create = (req, res) => {
 
     // Create a club
     const club = {
-      gender: req.body.gender,
-      club: req.body.club,
-      season: req.body.season
+        name: req.body.name,
+        type: req.body.type
     };
 
     // Save club in the database
@@ -34,13 +33,11 @@ exports.create = (req, res) => {
 
 // Retrieve all Tutorials from the database.
 exports.findAll = (req, res) => {
-    const gender = req.query.gender;
-    const club = req.query.club;
-    const season = req.query.season;
-    const condition = (gender||club||season)?{
-        gender: gender?{[Op.like]: `%${gender}%`}:undefined,
-        club: club?{[Op.like]: `%${club}%`}:undefined,
-        season: season?{[Op.like]: `%${season}%`}:undefined
+    const name = req.query.name;
+    const type = req.query.type;
+    const condition = (name||type)?{
+        name: name?{[Op.like]: `%${name}%`}:undefined,
+        type: type?{[Op.like]: `%${type}%`}:undefined
     }:null;
 
     Club.findAll({ where: condition })

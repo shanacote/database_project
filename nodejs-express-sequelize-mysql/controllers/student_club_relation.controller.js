@@ -5,7 +5,7 @@ const Op = db.Sequelize.Op;
 // Create and Save a new student_club_relation
 exports.create = (req, res) => {
     // Validate request
-    if (!req.body.title) {
+    if (!req.body.student_id || !req.body.club_id) {
       res.status(400).send({
         message: "Content can not be empty!"
       });
@@ -14,9 +14,8 @@ exports.create = (req, res) => {
 
     // Create a student_club_relation
     const student_club_relation = {
-      gender: req.body.gender,
-      student_club_relation: req.body.student_club_relation,
-      season: req.body.season
+      student_id: req.body.student_id,
+      club_id: req.body.club_id
     };
 
     // Save student_club_relation in the database
@@ -34,13 +33,11 @@ exports.create = (req, res) => {
 
 // Retrieve all Tutorials from the database.
 exports.findAll = (req, res) => {
-    const gender = req.query.gender;
-    const student_club_relation = req.query.student_club_relation;
-    const season = req.query.season;
-    const condition = (gender||student_club_relation||season)?{
-        gender: gender?{[Op.like]: `%${gender}%`}:undefined,
-        student_club_relation: student_club_relation?{[Op.like]: `%${student_club_relation}%`}:undefined,
-        season: season?{[Op.like]: `%${season}%`}:undefined
+    const student_id = req.query.student_id;
+    const club_id = req.query.club_id;
+    const condition = (student_id||club_id)?{
+        student_id: student_id?{[Op.like]: `%${student_id}%`}:undefined,
+        club_id: club_id?{[Op.like]: `%${club_id}%`}:undefined
     }:null;
 
     Student_club_relation.findAll({ where: condition })

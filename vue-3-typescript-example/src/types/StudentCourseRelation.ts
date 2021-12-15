@@ -1,4 +1,4 @@
 export default interface StudentCourseRelation {
     student_id: number;
-    course: number;
+    course_id: number;
 }

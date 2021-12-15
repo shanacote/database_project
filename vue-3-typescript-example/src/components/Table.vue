@@ -1,21 +1,21 @@
 <!-- Based on https://github.com/linmasahiro/vue3-table-lite -->
 <template>
-  <div class="card">
-    <div class="card-header" v-if="title">{{ title }}</div>
-    <div class="card-body">
-      <p class="card-title"></p>
+  <div class="relative flex flex-col min-w-0 rounded break-words border bg-white border-1 border-gray-300">
+    <div class="py-3 px-6 mb-0 bg-gray-200 border-b-1 border-gray-300 text-gray-900" v-if="title">{{ title }}</div>
+    <div class="flex-auto p-6">
+      <p class="mb-3"></p>
       <div id="dataTables-example_wrapper" class="dataTables_wrapper dt-bootstrap4 no-footer">
-        <div class="row"></div>
-        <div class="row">
-          <div class="col-sm-12">
-            <div class="row"></div>
+        <div class="flex flex-wrap "></div>
+        <div class="flex flex-wrap ">
+          <div class="sm:w-full pr-4 pl-4">
+            <div class="flex flex-wrap "></div>
             <div v-if="isLoading" class="loading-mask">
               <div class="loading-content">
                 <span style="color: white">Loading...</span>
               </div>
             </div>
             <table
-              class="table table-hover table-bordered table-responsive-sm"
+              class="w-full max-w-full mb-4 bg-transparent table-hover table-bordered block w-full overflow-auto scrolling-touch"
               id="dataTables-example"
               ref="localTable"
             >
@@ -105,8 +105,8 @@
             </table>
           </div>
         </div>
-        <div class="row" v-if="rows.length == 0">
-          <div class="col-sm-12 text-center">
+        <div class="flex flex-wrap " v-if="rows.length == 0">
+          <div class="sm:w-full pr-4 pl-4 text-center">
             {{ messages.noDataAvailable }}
           </div>
         </div>
@@ -186,209 +186,209 @@ export default defineComponent({
         let localTable = ref<HTMLElement | null>(null);
         // Internal set value for components
         const setting: tableSetting = reactive({
-        // Enable slot mode
-        isSlotMode: props.isSlotMode,
-        // Whether to select all
-        isCheckAll: false,
-        // KEY field name
-        keyColumn: computed(() => {
-            let key = "";
-            Object.assign(props.columns).forEach((col: column) => {
-                if (col.isKey) {
-                    key = col.field;
+            // Enable slot mode
+            isSlotMode: props.isSlotMode,
+            // Whether to select all
+            isCheckAll: false,
+            // KEY field name
+            keyColumn: computed(() => {
+                let key = "";
+                Object.assign(props.columns).forEach((col: column) => {
+                    if (col.isKey) {
+                        key = col.field;
+                    }
+                });
+                return key;
+            }),
+            // Sortable for local
+            order: props.sortable.order,
+            sort: props.sortable.sort,
+        });
+        // Data rows for local
+        const localRows = computed(() => {
+            // sort rows
+            let property = setting.order;
+            let sort_order = 1;
+            if (setting.sort === "desc") {
+                sort_order = -1;
+            }
+            let rows = props.rows as Array<unknown>;
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            rows.sort((a: any, b: any): number => {
+                if (a[property] < b[property]) {
+                    return -1 * sort_order;
+                } else if (a[property] > b[property]) {
+                    return sort_order;
+                } else {
+                    return 0;
                 }
             });
-            return key;
-        }),
-        // Sortable for local
-        order: props.sortable.order,
-        sort: props.sortable.sort,
-    });
-    // Data rows for local
-    const localRows = computed(() => {
-        // sort rows
-        let property = setting.order;
-        let sort_order = 1;
-        if (setting.sort === "desc") {
-            sort_order = -1;
-        }
-        let rows = props.rows as Array<unknown>;
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        rows.sort((a: any, b: any): number => {
-            if (a[property] < b[property]) {
-                return -1 * sort_order;
-            } else if (a[property] > b[property]) {
-                return sort_order;
-            } else {
-                return 0;
+            // return sorted and offset rows
+            let result = [];
+            for (let index = 0; index < props.total; index++) {
+                if (rows[index]) {
+                    result.push(rows[index]);
+                }
             }
+            nextTick(function () {
+                callIsFinished();
+            });
+            return result;
         });
-        // return sorted and offset rows
-        let result = [];
-        for (let index = 0; index < props.total; index++) {
-            if (rows[index]) {
-                result.push(rows[index]);
-            }
+        ////////////////////////////
+        //
+        //  Checkbox
+        //  (Checkbox related operations)
+        //
+        // Define Checkbox reference
+        const rowCheckbox = ref([]);
+        if (props.hasCheckbox) {
+            /**
+             * Execute before re-rendering
+             */
+            onBeforeUpdate(() => {
+                // Clear all values before each update
+                rowCheckbox.value = [];
+            });
+            /**
+             * Check all checkboxes for monitoring
+             */
+            watch(
+                () => setting.isCheckAll,
+                (state: boolean) => {
+                let isChecked: Array<string> = [];
+                rowCheckbox.value.forEach((val: HTMLInputElement) => {
+                    if (val) {
+                        val.checked = state;
+                        if (val.checked) {
+                            isChecked.push(val.value);
+                        }
+                    }
+                });
+                // Return the selected data on the screen
+                emit("return-checked-rows", isChecked);
+                }
+            );
         }
-        nextTick(function () {
-            callIsFinished();
-        });
-        return result;
-    });
-    ////////////////////////////
-    //
-    //  Checkbox
-    //  (Checkbox related operations)
-    //
-    // Define Checkbox reference
-    const rowCheckbox = ref([]);
-    if (props.hasCheckbox) {
         /**
-         * Execute before re-rendering
+         * Checkbox click event
          */
-        onBeforeUpdate(() => {
-            // Clear all values before each update
-            rowCheckbox.value = [];
-        });
-        /**
-         * Check all checkboxes for monitoring
-         */
-        watch(
-            () => setting.isCheckAll,
-            (state: boolean) => {
+        const checked = () => {
             let isChecked: Array<string> = [];
             rowCheckbox.value.forEach((val: HTMLInputElement) => {
-                if (val) {
-                    val.checked = state;
-                    if (val.checked) {
-                        isChecked.push(val.value);
-                    }
+                if (val && val.checked) {
+                    isChecked.push(val.value);
                 }
             });
             // Return the selected data on the screen
             emit("return-checked-rows", isChecked);
+        };
+        /**
+         * Clear all selected data on the screen
+         */
+        const clearChecked = () => {
+            rowCheckbox.value.forEach((val: HTMLInputElement) => {
+                if (val && val.checked) {
+                    val.checked = false;
+                }
+            });
+            // Return the selected data on the screen
+            emit("return-checked-rows", []);
+        };
+        ////////////////////////////
+        //
+        //  (Sorting, page change, etc. related operations)
+        //
+        /**
+         * Call execution sequencing
+         */
+        const doSort = (order: string) => {
+            let sort = "asc";
+            if (order == setting.order) {
+                // When sorting items
+                if (setting.sort == "asc") {
+                    sort = "desc";
+                }
+            }
+            //   let offset = (setting.page - 1) * setting.pageSize;
+            //   let limit = setting.pageSize;
+            setting.order = order;
+            setting.sort = sort;
+            emit("do-search", order, sort);
+            // Clear the selected data on the screen
+            if (setting.isCheckAll) {
+                // It will be cleared when you cancel all selections
+                setting.isCheckAll = false;
+            } else {
+                if (props.hasCheckbox) {
+                    clearChecked();
+                }
+            }
+        };
+
+        watch(
+            () => props.rows,
+            () => {
+                nextTick(function () {
+                    // Return the private components after the data is rendered
+                    if (!props.isStaticMode) {
+                        callIsFinished();
+                    }
+                });
             }
         );
-    }
-    /**
-     * Checkbox click event
-     */
-    const checked = () => {
-        let isChecked: Array<string> = [];
-        rowCheckbox.value.forEach((val: HTMLInputElement) => {
-            if (val && val.checked) {
-                isChecked.push(val.value);
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        const stringFormat = (template: string, ...args: any[]) => {
+            return template.replace(/{(\d+)}/g, function (match, number) {
+                return typeof args[number] != "undefined" ? args[number] : match;
+            });
+        };
+        // Call 「is-finished」 Method
+        const callIsFinished = () => {
+            if (localTable.value) {
+                let localElement = localTable.value.getElementsByClassName("is-rows-el");
+                emit("is-finished", localElement);
             }
-        });
-        // Return the selected data on the screen
-        emit("return-checked-rows", isChecked);
-    };
-    /**
-     * Clear all selected data on the screen
-     */
-    const clearChecked = () => {
-        rowCheckbox.value.forEach((val: HTMLInputElement) => {
-            if (val && val.checked) {
-                val.checked = false;
-            }
-        });
-        // Return the selected data on the screen
-        emit("return-checked-rows", []);
-    };
-    ////////////////////////////
-    //
-    //  (Sorting, page change, etc. related operations)
-    //
-    /**
-     * Call execution sequencing
-     */
-    const doSort = (order: string) => {
-        let sort = "asc";
-        if (order == setting.order) {
-            // When sorting items
-            if (setting.sort == "asc") {
-                sort = "desc";
-            }
-        }
-        //   let offset = (setting.page - 1) * setting.pageSize;
-        //   let limit = setting.pageSize;
-        setting.order = order;
-        setting.sort = sort;
-        emit("do-search", order, sort);
-        // Clear the selected data on the screen
-        if (setting.isCheckAll) {
-            // It will be cleared when you cancel all selections
-            setting.isCheckAll = false;
-        } else {
-            if (props.hasCheckbox) {
-                clearChecked();
-            }
-        }
-    };
-
-    watch(
-        () => props.rows,
-        () => {
-            nextTick(function () {
-                // Return the private components after the data is rendered
-                if (!props.isStaticMode) {
+        };
+        /**
+         * Mounted Event
+         */
+        onMounted(() => {
+            nextTick(() => {
+                if (props.rows.length > 0) {
                     callIsFinished();
                 }
             });
-        }
-    );
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const stringFormat = (template: string, ...args: any[]) => {
-        return template.replace(/{(\d+)}/g, function (match, number) {
-            return typeof args[number] != "undefined" ? args[number] : match;
         });
-    };
-    // Call 「is-finished」 Method
-    const callIsFinished = () => {
-        if (localTable.value) {
-            let localElement = localTable.value.getElementsByClassName("is-rows-el");
-            emit("is-finished", localElement);
+        if (props.hasCheckbox) {
+            // When Checkbox is needed
+            return {
+                slots,
+                localTable,
+                localRows,
+                setting,
+                rowCheckbox,
+                checked,
+                doSort,
+                // prevPage,
+                // movePage,
+                // nextPage,
+                stringFormat,
+            };
+        } else {
+            return {
+                slots,
+                localTable,
+                localRows,
+                setting,
+                doSort,
+                // prevPage,
+                // movePage,
+                // nextPage,
+                stringFormat,
+            };
         }
-    };
-    /**
-     * Mounted Event
-     */
-    onMounted(() => {
-        nextTick(() => {
-            if (props.rows.length > 0) {
-                callIsFinished();
-            }
-        });
-    });
-    if (props.hasCheckbox) {
-        // When Checkbox is needed
-        return {
-            slots,
-            localTable,
-            localRows,
-            setting,
-            rowCheckbox,
-            checked,
-            doSort,
-            // prevPage,
-            // movePage,
-            // nextPage,
-            stringFormat,
-        };
-    } else {
-        return {
-            slots,
-            localTable,
-            localRows,
-            setting,
-            doSort,
-            // prevPage,
-            // movePage,
-            // nextPage,
-            stringFormat,
-        };
-    }
-  },
+    },
 });
 </script>
 

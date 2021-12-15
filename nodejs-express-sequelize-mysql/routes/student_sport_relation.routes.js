@@ -16,7 +16,7 @@ module.exports = app => {
 //    router.put("/:id", student_sport_relation.update);
 
     // Delete a Tutorial with id
-//    router.delete("/:id", student_sport_relation.delete);
+   router.delete("/:student_id/:sport_id", student_sport_relation.delete);
 
     // Delete all student_sport_relation
 //    router.delete("/", student_sport_relation.deleteAll);

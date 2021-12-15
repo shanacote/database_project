@@ -1,23 +1,23 @@
 <template>
-  <div class="card">
-    <div class="card-header" v-if="title">{{ title }}</div>
-    <div class="card-body">
-      <p class="card-title"></p>
+  <div class="relative flex flex-col min-w-0 rounded break-words border bg-white border-1 border-gray-300">
+    <div class="py-3 px-6 mb-0 bg-gray-200 border-b-1 border-gray-300 text-gray-900" v-if="title">{{ title }}</div>
+    <div class="flex-auto p-6">
+      <p class="mb-3"></p>
       <div
         id="dataTables-example_wrapper"
         class="dataTables_wrapper dt-bootstrap4 no-footer"
       >
-        <div class="row"></div>
-        <div class="row">
-          <div class="col-sm-12">
-            <div class="row"></div>
+        <div class="flex flex-wrap "></div>
+        <div class="flex flex-wrap ">
+          <div class="sm:w-full pr-4 pl-4">
+            <div class="flex flex-wrap "></div>
             <div v-if="isLoading" class="loading-mask">
               <div class="loading-content">
                 <span style="color: white">Loading...</span>
               </div>
             </div>
             <table
-              class="table table-hover table-bordered table-responsive-sm"
+              class="w-full max-w-full mb-4 bg-transparent table-hover table-bordered block w-full overflow-auto scrolling-touch"
               id="dataTables-example"
               ref="localTable"
             >
@@ -106,15 +106,15 @@
             </table>
           </div>
         </div>
-        <div class="row" v-if="rows.length > 0">
-          <div class="col-sm-12 col-md-4">
+        <div class="flex flex-wrap " v-if="rows.length > 0">
+          <div class="sm:w-full pr-4 pl-4 md:w-1/3 pr-4 pl-4">
             <div role="status" aria-live="polite">
               {{
                 stringFormat(messages.pagingInfo, setting.offset, setting.limit, total)
               }}
             </div>
           </div>
-          <div class="col-sm-12 col-md-4">
+          <div class="sm:w-full pr-4 pl-4 md:w-1/3 pr-4 pl-4">
             <span>{{ messages.pageSizeChangeLabel }}</span>
             <select v-model="setting.pageSize">
               <option value="10">10</option>
@@ -126,15 +126,15 @@
               <option v-for="n in setting.maxPage" :key="n">{{ n }}</option>
             </select>
           </div>
-          <div class="col-sm-12 col-md-4">
+          <div class="sm:w-full pr-4 pl-4 md:w-1/3 pr-4 pl-4">
             <div
               class="dataTables_paginate paging_simple_numbers"
               id="dataTables-example_paginate"
             >
-              <ul class="pagination">
-                <li class="page-item" :class="{ disabled: setting.page <= 1 }">
+              <ul class="flex list-reset pl-0 rounded">
+                <li class="page-item" :class="{ opacity-75: setting.page <= 1 }">
                   <a
-                    class="page-link"
+                    class="relative block py-2 px-3 -ml-px leading-normal text-blue bg-white border border-gray-200 no-underline hover:text-blue-800 hover:bg-gray-200"
                     href="javascript:void(0)"
                     aria-label="Previous"
                     @click="setting.page = 1"
@@ -143,9 +143,9 @@
                     <span class="sr-only">First</span>
                   </a>
                 </li>
-                <li class="page-item" :class="{ disabled: setting.page <= 1 }">
+                <li class="page-item" :class="{ opacity-75: setting.page <= 1 }">
                   <a
-                    class="page-link"
+                    class="relative block py-2 px-3 -ml-px leading-normal text-blue bg-white border border-gray-200 no-underline hover:text-blue-800 hover:bg-gray-200"
                     href="javascript:void(0)"
                     aria-label="Previous"
                     @click="prevPage"
@@ -158,18 +158,18 @@
                   class="page-item"
                   v-for="n in setting.paging"
                   :key="n"
-                  :class="{ disabled: setting.page === n }"
+                  :class="{ opacity-75: setting.page === n }"
                 >
-                  <a class="page-link" href="javascript:void(0)" @click="movePage(n)">{{
+                  <a class="relative block py-2 px-3 -ml-px leading-normal text-blue bg-white border border-gray-200 no-underline hover:text-blue-800 hover:bg-gray-200" href="javascript:void(0)" @click="movePage(n)">{{
                     n
                   }}</a>
                 </li>
                 <li
                   class="page-item"
-                  :class="{ disabled: setting.page >= setting.maxPage }"
+                  :class="{ opacity-75: setting.page >= setting.maxPage }"
                 >
                   <a
-                    class="page-link"
+                    class="relative block py-2 px-3 -ml-px leading-normal text-blue bg-white border border-gray-200 no-underline hover:text-blue-800 hover:bg-gray-200"
                     href="javascript:void(0)"
                     aria-label="Next"
                     @click="nextPage"
@@ -180,10 +180,10 @@
                 </li>
                 <li
                   class="page-item"
-                  :class="{ disabled: setting.page >= setting.maxPage }"
+                  :class="{ opacity-75: setting.page >= setting.maxPage }"
                 >
                   <a
-                    class="page-link"
+                    class="relative block py-2 px-3 -ml-px leading-normal text-blue bg-white border border-gray-200 no-underline hover:text-blue-800 hover:bg-gray-200"
                     href="javascript:void(0)"
                     aria-label="Next"
                     @click="setting.page = setting.maxPage"
@@ -196,8 +196,8 @@
             </div>
           </div>
         </div>
-        <div class="row" v-else>
-          <div class="col-sm-12 text-center">
+        <div class="flex flex-wrap " v-else>
+          <div class="sm:w-full pr-4 pl-4 text-center">
             {{ messages.noDataAvailable }}
           </div>
         </div>
