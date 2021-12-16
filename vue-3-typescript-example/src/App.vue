@@ -1,6 +1,4 @@
 <template>
-  <!-- <HelloWorld msg="Welcome to Your Vue.js + TypeScript App" /> -->
-  <!-- <TutorialTable msg="test"/> -->
 
     <div id="app">
         <div class="py-10">
@@ -13,13 +11,7 @@
                                 <span class="font-semibold text-xl tracking-tight">Suffolk University</span>
                             </router-link>
 
-                            <!-- <img src="./assets/ram.jpg" class="h-8 w-8 mr-2" alt="Suffolk University"/>
-                        <span class="font-semibold text-xl tracking-tight">Suffolk University</span> -->
                             <router-link to="/admin" class="flex items-center inline-block py-2 no-underline">Admin</router-link>
-                            <!-- <div class="flex items-center"><span>primary</span></div>
-                            <div class="flex items-center"><span>second</span></div> -->
-                            <!-- <div class="hidden md:flex items-center space-x-1">
-                            </div> -->
                         </div>
                         <!-- <div class="flex space-x-4"> -->
                             <div v-if="currentUser" class="hidden md:flex items-center">
@@ -62,30 +54,6 @@
                     <p class="text-gray-500">Are you looking to get involved or see what is offered at this school?</p>
                 </div>
             </div>
-
-            <!-- <div v-if="!currentUser" class="navbar-nav ml-auto">
-                <li class="nav-item">
-                    <Login />
-                </li>
-            </div>
- -->
-            <!-- <nav class="relative flex flex-wrap items-center content-between py-3 px-4 flex-no-wrap content-start text-white bg-gray-900">
-                <router-link to="/" class="inline-block pt-1 pb-1 mr-4 text-lg whitespace-no-wrap">Home</router-link>
-                <div class="flex flex-wrap list-reset pl-0 mb-0 mr-auto">
-                    <li class="">
-                        <router-link to="/sport" class="inline-block py-2 px-4 no-underline">Sports</router-link>
-                    </li>
-                    <li class="">
-                        <router-link to="/add" class="inline-block py-2 px-4 no-underline">Add</router-link>
-                    </li>
-                </div>
-                <li class="nav-item">
-                    <a class="nav-link" @click.prevent="logOut">
-                        <font-awesome-icon icon="sign-out-alt" /> LogOut
-                    </a>
-                </li>
-            </nav> -->
-
             <div class="container mx-auto sm:px-2 mt-3">
                 <router-view />
             </div>
@@ -99,9 +67,6 @@
 <script lang="ts">
 import { defineComponent } from "vue";
 import { useStore } from 'vuex'
-// import Login from "./components/Login.vue";
-// import HelloWorld from "./components/HelloWorld.vue";
-// import TutorialTable from "./components/TutorialTable.vue";
 
 export default defineComponent({
     name: "App",
@@ -134,9 +99,6 @@ export default defineComponent({
         },
     },
     components: {
-        // Login,
-        // HelloWorld,
-        // TutorialTable
     }
 });
 </script>
