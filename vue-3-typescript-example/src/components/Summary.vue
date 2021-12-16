@@ -1,67 +1,87 @@
 <template>
-    <button class="flex items-center px-3 py-2 border rounded bg-blue-400 text-teal-200 border-teal-400 hover:text-white hover:border-white">
+    <button @click="toggleCourseSubscribe" class="flex items-center px-3 py-2 border rounded bg-blue-400 text-teal-200 border-teal-400 hover:text-white hover:border-white">
         <!-- <font-awesome-icon :icon="['fas', 'book']" /> -->
         <span>Subscribe to Course</span>
     </button>
-    <StudentCourseTable />
-    <button class="flex items-center px-3 py-2 border rounded bg-blue-400 text-teal-200 border-teal-400 hover:text-white hover:border-white">
+    <div v-if="showCourse" class="modal">
+        <SubscribeCourse @doneUpdate="subscribeCourseDone"/>
+    </div>
+    <StudentCourseTable ref="studentCourseTable"/>
+    <button @click="toggleSportSubscribe" class="flex items-center px-3 py-2 border rounded bg-blue-400 text-teal-200 border-teal-400 hover:text-white hover:border-white">
         <!-- <font-awesome-icon :icon="['fas', 'hockey-puck']" /> -->
         <span>Subscribe to Sport</span>
     </button>
-    <StudentSportTable />
-    <button class="flex items-center px-3 py-2 border rounded bg-blue-400 text-teal-200 border-teal-400 hover:text-white hover:border-white">
+    <div v-if="showSport" class="modal">
+        <SubscribeSport @doneUpdate="subscribeSportDone"/>
+    </div>
+    <StudentSportTable ref="studentSportTable"/>
+    <button @click="toggleClubSubscribe" class="flex items-center px-3 py-2 border rounded bg-blue-400 text-teal-200 border-teal-400 hover:text-white hover:border-white">
         <!-- <font-awesome-icon :icon="['fas', 'balance-scale']" /> -->
         <span>Subscribe to Club</span>
     </button>
-    <StudentClubTable />
+    <div v-if="showClub" class="modal">
+        <SubscribeClub @doneUpdate="subscribeClubDone"/>
+    </div>
+    <StudentClubTable ref="studentClubTable"/>
 </template>
 
 <script lang="ts">
-import { defineComponent } from "vue";
-import SportTable from "./SportTable.vue";
-import ClubTable from "./ClubTable.vue";
+import { defineComponent, reactive, ref } from "vue";
 import StudentCourseTable from "./StudentCourseTable.vue";
 import StudentSportTable from "./StudentSportTable.vue";
 import StudentClubTable from "./StudentClubTable.vue";
+import SubscribeCourse from "./SubscribeCourse.vue";
+import SubscribeSport from "./SubscribeSport.vue";
+import SubscribeClub from "./SubscribeClub.vue";
 
 
-interface Table {
-    key: string;
-    name: string;
-    route: string;
-    type:any;
-}
 export default defineComponent({
-    name: "Admin",
+    name: "Summary",
     data() {
         return {
-            tables: [
-                {key:'club',name:'Club',type:ClubTable},
-                {key:'sport',name:'Sport',type:SportTable}
-            ] as Table[],
-            currentTable: {} as Table,
-            currentIndex: -1,
-            title: "",
+            showCourse: false,
+            showSport: false,
+            showClub: false
         };
     },
     methods: {
-        setActiveTable(table: Table, index = -1) {
-            this.currentTable = table;
-            this.currentIndex = index;
+        toggleCourseSubscribe: function() {
+            this.showCourse=true;
+        },
+        toggleSportSubscribe: function() {
+            this.showSport=true;
+            console.log('test');
+        },
+        toggleClubSubscribe: function() {
+            this.showClub=true;
+            console.log('test');
+        },
+        subscribeCourseDone: function() {
+            this.showCourse=false;
+            const tableComp:any=this.$refs.studentCourseTable;
+            tableComp.doSearch('', 'asc');
+        },
+        subscribeSportDone: function() {
+            this.showSport=false;
+            const tableComp:any=this.$refs.studentSportTable;
+            tableComp.doSearch('', 'asc');
+        },
+        subscribeClubDone: function() {
+            this.showClub=false;
+            const tableComp:any=this.$refs.studentClubTable;
+            tableComp.doSearch('', 'asc');
         }
     },
     components: {
         StudentCourseTable,
         StudentSportTable,
-        StudentClubTable
+        StudentClubTable,
+        SubscribeCourse,
+        SubscribeSport,
+        SubscribeClub
     }
 });
 </script>
 
 <style>
-.list {
-  text-align: left;
-  max-width: 750px;
-  margin: auto;
-}
 </style>

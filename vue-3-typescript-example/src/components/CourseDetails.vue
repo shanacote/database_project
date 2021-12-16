@@ -15,12 +15,17 @@
                 </div>
                 <div class="mb-4">
                     <label for="Major_id">Major ID</label>
-                    <input
+                    <!-- <input
                     type="text"
                     class="block appearance-none w-full py-1 px-2 mb-1 text-base leading-normal bg-white text-gray-800 border border-gray-200 rounded"
                     id="Major_id"
                     v-model="currentCourse.Major_id"
-                    />
+                    /> -->
+                    <select id="major_id" v-model="currentCourse.major_id" class="block appearance-none w-full py-1 px-2 mb-1 text-base leading-normal bg-white text-gray-800 border border-gray-200 rounded">
+                        <option v-for="option in majorOptions.options" :value="option.value" :key="option.value">
+                            {{ option.text }}
+                        </option>
+                    </select>
                 </div>
                 <div class="mb-4">
                     <label for="course_code">Course Code</label>
@@ -63,10 +68,16 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from "vue";
+import { defineComponent, reactive } from "vue";
 import CourseDataService from "@/services/CourseDataService";
 import Course from "@/types/Course";
+import MajorDataService from "@/services/MajorDataService";
+import Major from "@/types/Major";
 import ResponseData from "@/types/ResponseData";
+
+const majorOptions = reactive({
+    options:[] as Array<Major>
+});
 
 export default defineComponent({
     name: "course",
@@ -75,6 +86,7 @@ export default defineComponent({
     },
     data() {
         return {
+            majorOptions,
             currentCourse: {} as Course,
             showModal: true,
             message: "",
@@ -126,6 +138,9 @@ export default defineComponent({
         this.showModal=false;
     }
 });
+MajorDataService.getAll().then((response: ResponseData) => {
+    majorOptions.options=response.data.map((e:any)=>{return {value:e.major_id, text:e.name}});
+});
 </script>
 
 <style>
@@ -139,7 +154,7 @@ export default defineComponent({
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    height: 300px;
+    height: 400px;
     width: 400px;
     background: gray;
     text-align: center;

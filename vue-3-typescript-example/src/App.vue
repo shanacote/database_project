@@ -4,7 +4,7 @@
 
     <div id="app">
         <div class="py-10">
-            <nav class="bg-gray-100 h-10 fixed top-0 left-0 right-0">
+            <nav class="bg-gray-100 h-10 fixed top-0 left-0 right-0" style="z-index:100">
                 <div class="max-w-6x1 mx-auto px-4">
                     <div class="flex justify-between">
                         <div class="flex space-x-4">
@@ -86,12 +86,7 @@
                 </li>
             </nav> -->
 
-            <div class="container mx-auto sm:px-2 mt-3
-                antialiased
-                bg-gradient-to-r
-                from-pink-300
-                via-purple-300
-                to-indigo-400">
+            <div class="container mx-auto sm:px-2 mt-3">
                 <router-view />
             </div>
         </div>

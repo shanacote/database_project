@@ -30,37 +30,38 @@ import Major from "@/types/Major";
 import ResponseData from "@/types/ResponseData";
 
 export default defineComponent({
-  name: "add-major",
-  data() {
-    return {
-      major: {
-        major_id: 0,
-        name: "",
-      } as Major,
-      submitted: false,
-    };
-  },
-  methods: {
-    saveMajor() {
-      let data = {
-        name: this.major.name,
-      };
-
-      MajorDataService.create(data)
-        .then((response: ResponseData) => {
-          this.major.major_id = response.data.major_id;
-          console.log(response.data);
-          this.submitted = true;
-        })
-        .catch((e: Error) => {
-          console.log(e);
-        });
+    name: "add-major",
+    data() {
+        return {
+            major: {
+                major_id: 0,
+                name: "",
+            } as Major,
+            submitted: false,
+        };
     },
+    emits: ['doneUpdate'],
+    methods: {
+        saveMajor() {
+            let data = {
+                name: this.major.name,
+            };
 
-    newMajor() {
-      this.major = {} as Major;
+            MajorDataService.create(data).then((response: ResponseData) => {
+                this.major.major_id = response.data.major_id;
+                console.log(response.data);
+                this.submitted = true;
+                this.$emit('doneUpdate');
+            }).catch((e: Error) => {
+                console.log(e);
+                this.$emit('doneUpdate');
+            });
+        },
+
+        newMajor() {
+            this.major = {} as Major;
+        },
     },
-  },
 });
 </script>
 

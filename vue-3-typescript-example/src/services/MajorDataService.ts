@@ -21,13 +21,6 @@ class MajorDataService {
         return http.delete(`/major/${id}`);
     }
 
-    deleteAll(): Promise<any> {
-        return http.delete(`/major`);
-    }
-
-    findByTitle(title: string): Promise<any> {
-        return http.get(`/major?title=${title}`);
-    }
 }
 
 export default new MajorDataService();

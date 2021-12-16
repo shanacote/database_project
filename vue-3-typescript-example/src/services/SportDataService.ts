@@ -20,14 +20,6 @@ class SportDataService {
     delete(id: any): Promise<any> {
         return http.delete(`/sport/${id}`);
     }
-
-    deleteAll(): Promise<any> {
-        return http.delete(`/sport`);
-    }
-
-    findByTitle(title: string): Promise<any> {
-        return http.get(`/sport?title=${title}`);
-    }
 }
 
 export default new SportDataService();

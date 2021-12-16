@@ -1,7 +1,7 @@
 <template>
     <table-lite
         :is-slot-mode="true"
-        :title= "'test'"
+        :title= "'Courses'"
         :has-checkbox="false"
         :is-loading="table.isLoading"
         :columns="table.columns"
@@ -36,7 +36,9 @@
 import { defineComponent, reactive, ref } from "vue";
 import TableLite from "./Table.vue";
 import CourseDataService from "@/services/CourseDataService";
+import MajorDataService from "@/services/MajorDataService";
 import Course from "@/types/Course";
+import Major from "@/types/Major";
 import ResponseData from "@/types/ResponseData";
 import CourseDetails from "./CourseDetails.vue";
 
@@ -63,9 +65,15 @@ const table = reactive({
         },
         {
             label: "Major_id",
-            field: "Major_id",
+            field: "major_id",
             width: "25%",
             sortable: false,
+            display: function (row: any) {
+                const major:Major=table.majors.find((e:Major)=>e.major_id===row.major_id)!;
+                return (
+                    '<span>'+major.name+'</span>'
+                );
+            }
         },
         {
             label: "course_code",
@@ -94,6 +102,7 @@ const table = reactive({
         }
     ],
     rows: [] as Array<Course>,
+    majors: [] as Array<Major>,
     showEditModal: false,
     currentCourseId: -1,
     totalRecordCount: 0,
@@ -136,6 +145,9 @@ const deleteClicked=function(courseId:number) {
 }
 const doSearch = (order: string, sort: string) => {
     table.isLoading = true;
+    MajorDataService.getAll().then((response: ResponseData) => {
+        table.majors=response.data;
+    });
 
     CourseDataService.getAll()
         .then((response: ResponseData) => {

@@ -19,16 +19,9 @@ class StudentCourseRelationDataService {
     }
 
     delete(student_id: any, course_id: any): Promise<any> {
-        return http.delete(`${ENDPOINT}/${student_id}/${course_id}`);
+        return http.delete(`${ENDPOINT}?student_id=${student_id}&course_id=${course_id}`);
     }
 
-    deleteAll(): Promise<any> {
-        return http.delete(ENDPOINT);
-    }
-
-    findByTitle(title: string): Promise<any> {
-        return http.get(`${ENDPOINT}?title=${title}`);
-    }
 }
 
 export default new StudentCourseRelationDataService();

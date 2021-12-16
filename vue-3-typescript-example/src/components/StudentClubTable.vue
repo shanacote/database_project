@@ -97,13 +97,15 @@ export default defineComponent({
         }
     },
     mounted() {
+        const store=useStore();
+        table.currentStudentId= store.state.auth.user.student_id;
         // Initial load
         this.doSearch('student_id', 'asc');
     },
     methods: {
         deleteClicked: function(club_id:number) {
-            console.log(`delete clicked for student:${this.currentUser()}, sport:${club_id}`);
-            StudentClubRelationDataService.delete(this.currentUser(), club_id)
+            console.log(`delete clicked for student:${table.currentStudentId}, sport:${club_id}`);
+            StudentClubRelationDataService.delete(table.currentStudentId, club_id)
                 .then((response: ResponseData) => {
                     console.log(response.data);
                     const idx=table.rows.findIndex((e:StudentClubExpanded)=>e.club_id===club_id);
@@ -115,9 +117,9 @@ export default defineComponent({
                 });
         },
         doSearch: (order: string, sort: string) => {
-            const store=useStore();
-            const loggedUser= store.state.auth.user;
             table.isLoading = true;
+            // const store=useStore();
+            // const loggedUser= store.state.auth.user;
             ClubDataService.getAll().then((response: ResponseData) => {
                 table.sports=response.data;
                 StudentClubRelationDataService.getAll().then((response: ResponseData) => {
@@ -127,7 +129,7 @@ export default defineComponent({
                     // refresh table rows
                     for(let i=0; i<response.data.length; i++) {
                         const scr:StudentClubRelation = response.data[i];
-                        if(scr.student_id===loggedUser) {
+                        if(scr.student_id===table.currentStudentId) {
                             const c:Club=table.sports.find(e=>e.club_id===scr.club_id)!;
                             table.rows.push({
                                 student_id:scr.student_id,

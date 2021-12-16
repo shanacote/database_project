@@ -107,7 +107,7 @@ export default defineComponent({
     },
     computed: {
         currentUser() {
-            const store=useStore();
+            const store=this.getStore();//useStore();
             return store.state.auth.user;
         },
     },
@@ -121,13 +121,18 @@ export default defineComponent({
 
     },
     mounted() {
+        const store=useStore();
+        table.currentStudentId= store.state.auth.user.student_id;
         // Initial load
         this.doSearch('student_id', 'asc');
     },
     methods: {
         deleteClicked: function(course_id:number) {
-            console.log(`delete clicked for student:${this.currentUser()}, course:${course_id}`);
-            StudentCourseRelationDataService.delete(this.currentUser(), course_id)
+            // const store=useStore();
+            // const store=self.getStore();
+            // const loggedUser= store.state.auth.user;
+            console.log(`delete clicked for student:${table.currentStudentId}, course:${course_id}`);
+            StudentCourseRelationDataService.delete(table.currentStudentId, course_id)
                 .then((response: ResponseData) => {
                     console.log(response.data);
                     const idx=table.rows.findIndex((e:StudentCourseExpanded)=>e.course_id===course_id);
@@ -139,9 +144,11 @@ export default defineComponent({
                 });
         },
         doSearch: (order: string, sort: string) => {
-            const store=useStore();
-            const loggedUser= store.state.auth.user;
+            // const self:any=this as any;
             table.isLoading = true;
+            // const store=useStore();
+            // // const store=self.getStore();
+            // const loggedUser= store.state.auth.user;
             MajorDataService.getAll().then((response: ResponseData) => {
                 table.majors=response.data;
             });
@@ -154,7 +161,7 @@ export default defineComponent({
                     // refresh table rows
                     for(let i=0; i<response.data.length; i++) {
                         const scr:StudentCourseRelation = response.data[i];
-                        if(scr.student_id===loggedUser) {
+                        if(scr.student_id===table.currentStudentId) {
                             const c:Course=table.courses.find(e=>e.course_id===scr.course_id)!;
                             table.rows.push({
                                 student_id:scr.student_id,

@@ -21,12 +21,8 @@ class CourseDataService {
         return http.delete(`/course/${id}`);
     }
 
-    deleteAll(): Promise<any> {
-        return http.delete(`/course`);
-    }
-
-    findByTitle(title: string): Promise<any> {
-        return http.get(`/course?title=${title}`);
+    findByMajor(major: any): Promise<any> {
+        return http.get(`/course?major_id=${major}`);
     }
 }
 

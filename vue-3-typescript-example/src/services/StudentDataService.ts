@@ -21,13 +21,6 @@ class StudentDataService {
         return http.delete(`/student/${id}`);
     }
 
-    deleteAll(): Promise<any> {
-        return http.delete(`/student`);
-    }
-
-    findByTitle(title: string): Promise<any> {
-        return http.get(`/student?title=${title}`);
-    }
 }
 
 export default new StudentDataService();

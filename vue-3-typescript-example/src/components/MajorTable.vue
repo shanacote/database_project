@@ -1,7 +1,7 @@
 <template>
     <table-lite
         :is-slot-mode="true"
-        :title= "'test'"
+        :title= "'Majors'"
         :has-checkbox="false"
         :is-loading="table.isLoading"
         :columns="table.columns"

@@ -52,41 +52,42 @@ import Sport from "@/types/Sport";
 import ResponseData from "@/types/ResponseData";
 
 export default defineComponent({
-  name: "add-sport",
-  data() {
-    return {
-      sport: {
-        sport_id: 0,
-        gender: "",
-        sport: "",
-        season: "",
-      } as Sport,
-      submitted: false,
-    };
-  },
-  methods: {
-    saveSport() {
-      let data = {
-        gender: this.sport.gender,
-        sport: this.sport.sport,
-        season: this.sport.season,
-      };
-
-      SportDataService.create(data)
-        .then((response: ResponseData) => {
-          this.sport.sport_id = response.data.sport_id;
-          console.log(response.data);
-          this.submitted = true;
-        })
-        .catch((e: Error) => {
-          console.log(e);
-        });
+    name: "add-sport",
+    data() {
+        return {
+            sport: {
+                sport_id: 0,
+                gender: "",
+                sport: "",
+                season: "",
+            } as Sport,
+            submitted: false,
+        };
     },
+    emits: ['doneUpdate'],
+    methods: {
+        saveSport() {
+            let data = {
+                gender: this.sport.gender,
+                sport: this.sport.sport,
+                season: this.sport.season,
+            };
 
-    newSport() {
-      this.sport = {} as Sport;
+            SportDataService.create(data).then((response: ResponseData) => {
+                this.sport.sport_id = response.data.sport_id;
+                console.log(response.data);
+                this.submitted = true;
+                this.$emit('doneUpdate');
+            }).catch((e: Error) => {
+                console.log(e);
+                this.$emit('doneUpdate');
+            });
+        },
+
+        newSport() {
+            this.sport = {} as Sport;
+        },
     },
-  },
 });
 </script>
 

@@ -6,13 +6,13 @@ import ResponseData from "@/types/ResponseData";
 import Student from "@/types/Student";
 
 class AuthService {
-    login(user: any): Promise<Student> {
+    login(user: Student): Promise<Student> {
         return new Promise<Student>((resolve, reject) => {
             return StudentDataService.getAll()
                 .then((response: ResponseData) => {
                     const student:Student=response.data.find((e:any)=>e.student_id==user.student_id);
                     if(student.password===user.password) {
-                        localStorage.setItem('user', user.student_id);
+                        localStorage.setItem('user', JSON.stringify(student));
                         resolve(student);
                     } else {
                         reject(new Error('Wrong user or password'))

@@ -8,11 +8,11 @@ show tables;
 
 drop table major;
 create table major (
-     Major_ID INT NOT NULL AUTO_INCREMENT,
-     Name VARCHAR(255) NOT NULL,
+     major_id INT NOT NULL AUTO_INCREMENT,
+     name VARCHAR(255) NOT NULL,
      -- createdAt datetime NOT NULL,
      -- updatedAt datetime NOT NULL,
-     PRIMARY KEY(Major_ID)
+     PRIMARY KEY(major_id)
 );
 desc major;
 -- insert into major (Name, createdAt, updatedAt) values ('Computer Science', curdate(), curdate());
@@ -30,24 +30,25 @@ insert into major (Name) values ('Graphic Design');
 
 drop table student;
 create table student (
-     Student_ID INT NOT NULL AUTO_INCREMENT,
-     Name VARCHAR(50) NOT NULL,
-     Major_id INT NOT NULL,
-     PRIMARY KEY(Student_ID),
-     CONSTRAINT student_major_fk FOREIGN KEY (Major_id) REFERENCES major(Major_ID)
+     student_id INT NOT NULL AUTO_INCREMENT,
+     name VARCHAR(50) NOT NULL,
+     major_id INT NOT NULL,
+     password VARCHAR(100) NOT NULL,
+     PRIMARY KEY(student_id),
+     CONSTRAINT student_major_fk FOREIGN KEY (major_id) REFERENCES major(major_id)
 );
 
 desc student;
-insert into student values (1, 'Shana', 1);
-insert into student values (2, 'Joe', 2);
-insert into student values (3, 'George', 3);
-insert into student values (4, 'Blake', 4);
-insert into student values (5, 'Scarlett', 5);
-insert into student values (6, 'Kate', 6);
-insert into student values (7, 'Rosie', 7);
-insert into student values (8, 'Lucas', 8);
-insert into student values (9, 'Claire', 9);
-insert into student values (10, 'Brad', 10);
+insert into student values (1, 'Shana', 1, 'pass');
+insert into student values (2, 'Joe', 2, 'pass');
+insert into student values (3, 'George', 3, 'pass');
+insert into student values (4, 'Blake', 4, 'pass');
+insert into student values (5, 'Scarlett', 5, 'pass');
+insert into student values (6, 'Kate', 6, 'pass');
+insert into student values (7, 'Rosie', 7, 'pass');
+insert into student values (8, 'Lucas', 8, 'pass');
+insert into student values (9, 'Claire', 9, 'pass');
+insert into student values (10, 'Brad', 10, 'pass');
 
 -- drop table department;
 -- create table department (
@@ -64,12 +65,12 @@ drop table course;
 create table course (
      course_id INT NOT NULL AUTO_INCREMENT,
      school_code VARCHAR(50) NOT NULL,
-     Major_id INT NOT NULL,
-     Course_code VARCHAR(50) NOT NULL,
-     Name VARCHAR(50) NOT NULL,
+     major_id INT NOT NULL,
+     course_code VARCHAR(50) NOT NULL,
+     name VARCHAR(50) NOT NULL,
      PRIMARY KEY(course_id),
-     FOREIGN KEY (Major_id)
-          REFERENCES major(Major_ID)
+     FOREIGN KEY (major_id)
+          REFERENCES major(major_id)
 );
 desc course;
 insert into course values (1, 'CAS', 1, 'CMPSC-310', 'Introduction to Data Science');
@@ -86,11 +87,11 @@ insert into course values (11, 'SBS', 4, 'ACCT-201', 'Accounting for Decision Ma
 
 drop table sport;
 create table sport (
-     Sport_ID INT NOT NULL AUTO_INCREMENT,
-     Gender VARCHAR(50) NOT NULL,
-     Sport VARCHAR(50) NOT NULL,
-     Season VARCHAR(50) NOT NULL,
-     PRIMARY KEY(Sport_ID)
+     sport_id INT NOT NULL AUTO_INCREMENT,
+     gender VARCHAR(50) NOT NULL,
+     sport VARCHAR(50) NOT NULL,
+     season VARCHAR(50) NOT NULL,
+     PRIMARY KEY(sport_id)
 );
 desc sport;
 insert into sport values (1, 'Womens', 'Hockey', 'Winter');
@@ -107,10 +108,10 @@ insert into sport values (10, 'Mens', 'Golf', 'Fall');
 
 drop table club;
 create table club (
-     Club_ID INT NOT NULL AUTO_INCREMENT,
-     Name VARCHAR(50) NOT NULL,
-     Type VARCHAR(50) NOT NULL,
-     PRIMARY KEY(Club_ID)
+     club_id INT NOT NULL AUTO_INCREMENT,
+     name VARCHAR(50) NOT NULL,
+     type VARCHAR(50) NOT NULL,
+     PRIMARY KEY(club_id)
 );
 desc club;
 insert into club values (1,'Suffolk Investments Club (SUIC)', 'academic interests');
@@ -126,10 +127,10 @@ insert into club values (10,'Drone Club', 'special interests');
 
 drop table student_courses_relation;
 create table student_courses_relation (
-     Student_ID INT NOT NULL,
+     student_id INT NOT NULL,
      course_id INT NOT NULL,
-     FOREIGN KEY (Student_ID)
-        REFERENCES student(Student_ID),
+     FOREIGN KEY (student_id)
+        REFERENCES student(student_id),
      FOREIGN KEY (course_id)
         REFERENCES course(course_id)
 );
@@ -148,12 +149,12 @@ insert into student_courses_relation values (4, 11);
 
 drop table student_sport_relation;
 create table student_sport_relation (
-     Student_ID INT NOT NULL,
-     Sport_ID INT NOT NULL,
-     FOREIGN KEY (Student_ID)
-        REFERENCES student(Student_ID),
-     FOREIGN KEY (Sport_ID)
-        REFERENCES sport(Sport_ID)
+     student_id INT NOT NULL,
+     sport_id INT NOT NULL,
+     FOREIGN KEY (student_id)
+        REFERENCES student(student_id),
+     FOREIGN KEY (sport_id)
+        REFERENCES sport(sport_id)
 );
 desc student_sport_relation;
 insert into student_sport_relation values (1, 1);
@@ -170,12 +171,12 @@ insert into student_sport_relation values (10, 9);
 
 drop table student_club_relation;
 create table student_club_relation (
-     Student_ID INT NOT NULL,
-     Club_ID INT NOT NULL,
-     FOREIGN KEY (Student_ID)
-        REFERENCES student(Student_ID),
-     FOREIGN KEY (Club_ID)
-        REFERENCES club(Club_ID)
+     student_id INT NOT NULL,
+     club_id INT NOT NULL,
+     FOREIGN KEY (student_id)
+        REFERENCES student(student_id),
+     FOREIGN KEY (club_id)
+        REFERENCES club(club_id)
 );
 desc student_club_relation;
 insert into student_club_relation values (1, 5);

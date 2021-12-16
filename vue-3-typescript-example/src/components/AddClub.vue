@@ -2,18 +2,6 @@
   <div class="submit-form">
     <div v-if="!submitted">
       <div class="mb-4">
-        <label for="club_id">Club_id</label>
-        <input
-          type="text"
-          class="block appearance-none w-full py-1 px-2 mb-1 text-base leading-normal bg-white text-gray-800 border border-gray-200 rounded"
-          id="club_id"
-          required
-          v-model="club.club_id"
-          name="club_id"
-        />
-      </div>
-
-      <div class="mb-4">
         <label for="club">Name</label>
         <input
           class="block appearance-none w-full py-1 px-2 mb-1 text-base leading-normal bg-white text-gray-800 border border-gray-200 rounded"
@@ -52,41 +40,41 @@ import Club from "@/types/Club";
 import ResponseData from "@/types/ResponseData";
 
 export default defineComponent({
-  name: "add-club",
-  data() {
-    return {
-      club: {
-        club_id: 0,
-        name: "",
-        type: "",
-        season: "",
-      } as Club,
-      submitted: false,
-    };
-  },
-  methods: {
-    saveClub() {
-      let data = {
-        club_id: this.club.club_id,
-        name: this.club.name,
-        type: this.club.type,
-      };
-
-      ClubDataService.create(data)
-        .then((response: ResponseData) => {
-          this.club.club_id = response.data.club_id;
-          console.log(response.data);
-          this.submitted = true;
-        })
-        .catch((e: Error) => {
-          console.log(e);
-        });
+    name: "add-club",
+    data() {
+        return {
+            club: {
+                club_id: 0,
+                name: "",
+                type: "",
+                season: "",
+            } as Club,
+            submitted: false,
+        };
     },
+    emits: ['doneUpdate'],
+    methods: {
+        saveClub() {
+            let data = {
+                name: this.club.name,
+                type: this.club.type,
+            };
 
-    newClub() {
-      this.club = {} as Club;
+            ClubDataService.create(data).then((response: ResponseData) => {
+                this.club.club_id = response.data.club_id;
+                console.log(response.data);
+                this.submitted = true;
+                this.$emit('doneUpdate');
+            }).catch((e: Error) => {
+                console.log(e);
+                this.$emit('doneUpdate');
+            });
+        },
+
+        newClub() {
+            this.club = {} as Club;
+        },
     },
-  },
 });
 </script>
 

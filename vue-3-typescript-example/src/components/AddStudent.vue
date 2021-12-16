@@ -28,6 +28,16 @@
           name="major_id"
         /> -->
       </div>
+      <div class="mb-4">
+        <label for="password">Password</label>
+        <input
+          class="block appearance-none w-full py-1 px-2 mb-1 text-base leading-normal bg-white text-gray-800 border border-gray-200 rounded"
+          id="password"
+          required
+          v-model="student.password"
+          name="password"
+        />
+      </div>
 
 
       <button @click="saveStudent" class="inline-block align-middle text-center select-none border font-normal whitespace-no-wrap rounded py-1 px-3 leading-normal no-underline bg-green-500 text-white hover:bg-green-600">Submit</button>
@@ -64,15 +74,18 @@ export default defineComponent({
                 student_id: 0,
                 name: "",
                 major_id: 0,
+                password: "",
             } as Student,
             submitted: false,
         };
     },
+    emits: ['doneUpdate'],
     methods: {
         saveStudent() {
             let data = {
                 name: this.student.name,
                 major_id: this.student.major_id,
+                password: this.student.password,
             };
 
             StudentDataService.create(data)
@@ -80,9 +93,11 @@ export default defineComponent({
                     this.student.student_id = response.data.student_id;
                     console.log(response.data);
                     this.submitted = true;
+                    this.$emit('doneUpdate');
                 })
                 .catch((e: Error) => {
                     console.log(e);
+                    this.$emit('doneUpdate');
                 });
         },
 

@@ -104,13 +104,15 @@ export default defineComponent({
         }
     },
     mounted() {
+        const store=useStore();
+        table.currentStudentId= store.state.auth.user.student_id;
         // Initial load
         this.doSearch('student_id', 'asc');
     },
     methods: {
         deleteClicked: function(sport_id:number) {
-            console.log(`delete clicked for student:${this.currentUser()}, sport:${sport_id}`);
-            StudentSportRelationDataService.delete(this.currentUser(), sport_id)
+            console.log(`delete clicked for student:${table.currentStudentId}, sport:${sport_id}`);
+            StudentSportRelationDataService.delete(table.currentStudentId, sport_id)
                 .then((response: ResponseData) => {
                     console.log(response.data);
                     const idx=table.rows.findIndex((e:StudentSportExpanded)=>e.sport_id===sport_id);
@@ -122,9 +124,9 @@ export default defineComponent({
                 });
         },
         doSearch: (order: string, sort: string) => {
-            const store=useStore();
-            const loggedUser= store.state.auth.user;
             table.isLoading = true;
+            // const store=useStore();
+            // const loggedUser= store.state.auth.user;
             SportDataService.getAll().then((response: ResponseData) => {
                 table.sports=response.data;
                 StudentSportRelationDataService.getAll().then((response: ResponseData) => {
@@ -134,7 +136,7 @@ export default defineComponent({
                     // refresh table rows
                     for(let i=0; i<response.data.length; i++) {
                         const scr:StudentSportRelation = response.data[i];
-                        if(scr.student_id===loggedUser) {
+                        if(scr.student_id===table.currentStudentId) {
                             const c:Sport=table.sports.find(e=>e.sport_id===scr.sport_id)!;
                             table.rows.push({
                                 student_id:scr.student_id,

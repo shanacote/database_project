@@ -21,13 +21,6 @@ class ClubDataService {
         return http.delete(`/club/${id}`);
     }
 
-    deleteAll(): Promise<any> {
-        return http.delete(`/club`);
-    }
-
-    findByTitle(title: string): Promise<any> {
-        return http.get(`/club?title=${title}`);
-    }
 }
 
 export default new ClubDataService();

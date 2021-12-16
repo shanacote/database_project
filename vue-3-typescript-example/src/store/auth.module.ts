@@ -1,4 +1,5 @@
 import AuthService from '../services/auth.service';
+import Student from "@/types/Student";
 
 const user = JSON.parse(localStorage.getItem('user')!);
 const initialState = user
@@ -9,7 +10,7 @@ export const auth = {
     namespaced: true,
     state: initialState,
     actions: {
-        login({ commit }:any, user:number) {
+        login({ commit }:any, user:Student) {
         return AuthService.login(user).then(
             user => {
                 commit('loginSuccess', user);
@@ -39,7 +40,7 @@ export const auth = {
         // }
     },
     mutations: {
-        loginSuccess(state:any, user:number) {
+        loginSuccess(state:any, user:Student) {
             state.status.loggedIn = true;
             state.user = user;
         },
